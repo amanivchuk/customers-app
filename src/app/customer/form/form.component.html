@@ -1,0 +1,78 @@
+<ul class="alert alert-danger" *ngIf="errors?.length > 0">
+  <li *ngFor="let err of errors">
+    {{err}}
+  </li>
+</ul>
+
+<div class="car bg-dark text-white">
+  <div class="card-header">
+    {{title}}
+  </div>
+  <div class="card-body">
+    <form #customerForm="ngForm">
+      <div class="form-group row">
+        <label for="first_name" class="col-form-label col-sm-2">First name</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="customer.firstName" name="first_name"
+                  #first_name="ngModel"> <!--minlength="4" required-->
+          <div class="alert alert-danger" *ngIf="first_name.invalid && (first_name.dirty || first_name.touched)">
+            <div *ngIf="first_name.errors.required">
+              First name required
+            </div>
+            <div *ngIf="first_name.errors.minlength">
+              First name must be more than 4 characters
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="last_name" class="col-form-label col-sm-2">Last name</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="customer.lastName" name="last_name"
+                 #last_name="ngModel"> <!--minlength="4" required-->
+          <div class="alert alert-danger" *ngIf="last_name.invalid && (last_name.dirty || last_name.touched)">
+            <div *ngIf="last_name.errors.required">
+              Last name is required
+            </div>
+            <div *ngIf="last_name.errors.minlength">
+              Last name must be more than 4 characters
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <label for="email" class="col-form-label col-sm-2">Email</label>
+        <div class="col-sm-6">
+          <input type="text" class="form-control" [(ngModel)]="customer.email" name="email"  #email="ngModel"> <!--email required-->
+          <div class="alert alert-danger" *ngIf="email.invalid && (email.dirty || email.touched)">
+            <div *ngIf="email.errors.required">
+              Email is required
+            </div>
+            <div *ngIf="email.errors.email">
+              Email is not correct
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="form-group row">
+        <div class="col-sm-6">
+          <button class="btn btn-primary" role="button" (click)="create()" *ngIf="!customer.id else elseBlock"
+                  [disabled]="!customerForm.form.valid"
+          >Create
+          </button>
+
+          <ng-template #elseBlock>
+            <button class="btn btn-primary" role="button" (click)="update()"
+                    [disabled]="!customerForm.form.valid"
+            >Update
+            </button>
+          </ng-template>
+        </div>
+      </div>
+
+    </form>
+  </div>
+</div>

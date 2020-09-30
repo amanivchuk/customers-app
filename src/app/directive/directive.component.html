@@ -1,0 +1,13 @@
+<button type="button" (click)="setHide()" class="btn btn-primary my-3">
+  {{hide == true? 'Hide': 'Open'}}
+</button>
+<div class="card">
+  <div class="card-header">
+    List of curses
+  </div>
+  <ul class="list-group" *ngIf="hide == true">
+    <li class="list-group-item" *ngFor="let curs of listCurses">
+      {{curs}}
+    </li>
+  </ul>
+</div>
