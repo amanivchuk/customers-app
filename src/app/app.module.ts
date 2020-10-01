@@ -13,7 +13,8 @@ import {HttpClientModule} from '@angular/common/http';
 import { FormComponent } from './customer/form/form.component';
 import {FormsModule} from '@angular/forms';
 import {registerLocaleData} from '@angular/common';
-import localeRU from '@angular/common/locales/ru'
+import localeRU from '@angular/common/locales/ru';
+import { PaginatorComponent } from './paginator/paginator.component'
 
 registerLocaleData(localeRU, 'ru')
 
@@ -21,6 +22,7 @@ const routes: Routes = [
   {path: '', redirectTo: '/customers', pathMatch: 'full'},
   {path: 'directive', component: DirectiveComponent},
   {path: 'customers', component: CustomerComponent},
+  {path: 'customers/page/:page', component: CustomerComponent},
   {path: 'customers/form', component: FormComponent},
   {path: 'customers/form/:id', component: FormComponent}
 ]
@@ -32,7 +34,8 @@ const routes: Routes = [
     FooterComponent,
     DirectiveComponent,
     CustomerComponent,
-    FormComponent
+    FormComponent,
+    PaginatorComponent
   ],
   imports: [
     BrowserModule,
