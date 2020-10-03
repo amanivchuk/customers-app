@@ -1,3 +1,4 @@
+<app-detail *ngIf="customerSelected" [customer]='customerSelected'></app-detail>
 <div class="card border-primary mb-3">
   <div class="card-header">Customers</div>
   <div class="card-body text-primary">
@@ -5,8 +6,9 @@
 
     <div class="my-2 text-left">
       <button class="btn btn-rounded btn-primary" type="button"
-        [routerLink]="['/customers/form']"
-      >Create customer</button>
+              [routerLink]="['/customers/form']"
+      >Create customer
+      </button>
     </div>
     <div *ngIf="customers?.length === 0" class="alert alert-info">
       Customers not found!
@@ -19,19 +21,33 @@
         <th>LastName</th>
         <th>Email</th>
         <th>CreatedAt</th>
+        <th>Region</th>
         <th>Edit</th>
         <th>Delete</th>
       </tr>
       </thead>
       <tbody>
       <tr *ngFor="let cust of customers">
-        <td>{{cust.id}}</td>
+        <!--        <td><button [routerLink]="['/customers/detail', cust.id]" class="btn btn-success btn-sm">{{cust.id}}</button></td>-->
+        <!--        <td><button (click)="openModal(cust)" class="btn btn-success btn-sm">{{cust.id}}</button></td>-->
+        <td><img (click)="openModal(cust)" *ngIf="cust?.photo" src="http://localhost:8080/api/customers/upload/img/{{cust.photo}}"
+                 alt="{{cust.photo}}" class="img-thumbnail rounded"
+                 style="width: 64px; cursor: pointer"
+        >
+
+          <img (click)="openModal(cust)" *ngIf="!cust?.photo" src="http://localhost:8080/images/not_interested.png"
+               alt="no-photo" class="img-thumbnail rounded"
+               style="width: 64px; cursor: pointer"
+          >
+        </td>
         <td>{{cust.firstName | uppercase}}</td>
         <td>{{cust.lastName}}</td>
         <td>{{cust.email}}</td>
         <td>{{cust.createdAt | date:'fullDate'}}</td>
+        <td>{{cust.region.name}}</td>
         <td>
-          <button type="button" name="edit" [routerLink]="['/customers/form', cust.id]" class="btn btn-primary">edit</button>
+          <button type="button" name="edit" [routerLink]="['/customers/form', cust.id]" class="btn btn-primary">edit
+          </button>
         </td>
         <td>
           <button type="button" name="delete" (click)="delete(cust)" class="btn btn-danger btn-sm">delete</button>

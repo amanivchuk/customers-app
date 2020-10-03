@@ -2,11 +2,12 @@ import {Injectable} from '@angular/core';
 import {CUSTOMERS} from './customer.json';
 import {Customer} from './Customer';
 import {Observable, of, throwError} from 'rxjs';
-import {HttpClient, HttpHeaders} from '@angular/common/http';
+import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from '@angular/common/http';
 import {catchError, map, tap} from 'rxjs/operators';
 import swal from 'sweetalert2';
 import {Router} from '@angular/router';
 import {DatePipe} from '@angular/common';
+import {Region} from './Region';
 
 @Injectable()
 export class CustomerService {
@@ -18,6 +19,10 @@ export class CustomerService {
     private http: HttpClient,
     private router: Router
   ) {
+  }
+
+  getRegions(): Observable<Region[]>{
+    return this.http.get<Region[]>('http://localhost:8080/api/customers/regions');
   }
 
   getCustomers(page: number): Observable<any> {
@@ -114,5 +119,17 @@ export class CustomerService {
         return throwError(e);
       })
     );
+  }
+
+  uploadPhoto(photo: File, id): Observable<HttpEvent<{}>>{
+    let formData = new FormData();
+    formData.append("photo", photo);
+    formData.append("id", id);
+
+    const req = new HttpRequest('POST', 'http://localhost:8080/api/customers/upload', formData, {
+      reportProgress: true
+    });
+
+    return this.http.request(req);
   }
 }

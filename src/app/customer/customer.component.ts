@@ -5,6 +5,7 @@ import {CustomerService} from './customer.service';
 import Swal from 'sweetalert2';
 import {tap} from 'rxjs/operators';
 import {ActivatedRoute} from '@angular/router';
+import {ModalService} from './detail/modal.service';
 
 @Component({
   selector: 'app-customer',
@@ -15,10 +16,12 @@ export class CustomerComponent implements OnInit {
 
   customers: Customer[];
   paginator: any;
+  customerSelected: Customer;
 
   constructor(
     private customerService: CustomerService,
-    private activatedRoute: ActivatedRoute
+    private activatedRoute: ActivatedRoute,
+    private modalService: ModalService
   ) {
   }
 
@@ -44,6 +47,15 @@ export class CustomerComponent implements OnInit {
           this.paginator = response;
         });
     });
+
+    this.modalService.notificationUpload.subscribe(customer => {
+      this.customers.map(customerOrignal => {
+        if(customer.id == customerOrignal.id){
+          customerOrignal.photo = customer.photo;
+        }
+        return customerOrignal;
+      })
+    })
   }
 
   delete(customer: Customer): void {
@@ -90,4 +102,8 @@ export class CustomerComponent implements OnInit {
   }
 
 
+  openModal(customer: Customer) {
+    this.customerSelected = customer;
+    this.modalService.openModal();
+  }
 }

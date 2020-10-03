@@ -14,7 +14,11 @@ import { FormComponent } from './customer/form/form.component';
 import {FormsModule} from '@angular/forms';
 import {registerLocaleData} from '@angular/common';
 import localeRU from '@angular/common/locales/ru';
-import { PaginatorComponent } from './paginator/paginator.component'
+import { PaginatorComponent } from './paginator/paginator.component';
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import {MatDatepickerModule} from '@angular/material';
+import {MatMomentDateModule} from '@angular/material-moment-adapter';
+import { DetailComponent } from './customer/detail/detail.component';
 
 registerLocaleData(localeRU, 'ru')
 
@@ -24,7 +28,8 @@ const routes: Routes = [
   {path: 'customers', component: CustomerComponent},
   {path: 'customers/page/:page', component: CustomerComponent},
   {path: 'customers/form', component: FormComponent},
-  {path: 'customers/form/:id', component: FormComponent}
+  {path: 'customers/form/:id', component: FormComponent},
+  // {path: 'customers/detail/:id', component: DetailComponent}
 ]
 
 @NgModule({
@@ -35,14 +40,18 @@ const routes: Routes = [
     DirectiveComponent,
     CustomerComponent,
     FormComponent,
-    PaginatorComponent
+    PaginatorComponent,
+    DetailComponent
   ],
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     RouterModule.forRoot(routes),
-    FormsModule
+    FormsModule,
+    BrowserAnimationsModule,
+    MatDatepickerModule,
+    MatMomentDateModule
   ],
   providers: [
     CustomerService,
