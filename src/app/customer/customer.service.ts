@@ -1,25 +1,19 @@
 import {Injectable} from '@angular/core';
-import {CUSTOMERS} from './customer.json';
 import {Customer} from './Customer';
-import {Observable, of, throwError} from 'rxjs';
+import {Observable, throwError} from 'rxjs';
 import {HttpClient, HttpEvent, HttpHeaders, HttpRequest} from '@angular/common/http';
 import {catchError, map, tap} from 'rxjs/operators';
-import swal from 'sweetalert2';
 import {Router} from '@angular/router';
-import {DatePipe} from '@angular/common';
 import {Region} from './Region';
 
 @Injectable()
 export class CustomerService {
 
-  httpHeader = new HttpHeaders({'Content-Type': 'application/json'});
-
   constructor(
     // private urlEndPoint:string = 'http://localhost:8080/api/customers',
     private http: HttpClient,
     private router: Router
-  ) {
-  }
+  ) {}
 
   getRegions(): Observable<Region[]>{
     return this.http.get<Region[]>('http://localhost:8080/api/customers/regions');
@@ -44,47 +38,17 @@ export class CustomerService {
     );
   }
 
-  /*getCustomers(): Observable<Customer[]>{
-    // return of(CUSTOMERS);
-    return this.http.get('http://localhost:8080/api/customers').pipe(
-      tap(response => {
-        let customers = response as Customer[];
-        console.log('Tap 1');
-        customers.forEach(customer => {
-          console.log(customer.id);
-        })
-      }),
-      map(response => {
-        let customers = response as Customer[];
-        return customers.map(customer => {
-           customer.firstName = customer.firstName.toUpperCase();
-           // customer.createdAt = formatDate(customer.createdAt, 'dd-MM-yyyy', 'en-US');
-
-          // let datePipe = new DatePipe('ru');
-            // customer.createdAt = datePipe.transform(customer.createdAt, 'fullDate')
-          return customer;
-        });
-      }),
-      tap(response => {
-        console.log('Tap 2');
-        response.forEach(customer => {
-          console.log(customer.id);
-        })
-      })
-    );
-  }*/
-
   create(customer: Customer): Observable<Customer> {
-    return this.http.post<any>('http://localhost:8080/api/customers', customer, {headers: this.httpHeader}).pipe(
+    return this.http.post<any>('http://localhost:8080/api/customers', customer).pipe(
       map((response: any) => response.customer as Customer),
       catchError(e => {
-
         if (e.status == 400) {
           return throwError(e);
         }
 
-        console.error(e.error.message);
-        swal.fire('Error create new customer', e.error.error, 'error');
+        if(e.error.message){
+          console.error(e.error.message);
+        }
         return throwError(e);
       })
     );
@@ -93,29 +57,38 @@ export class CustomerService {
   getCustomer(id): Observable<Customer> {
     return this.http.get<Customer>('http://localhost:8080/api/customers/' + id).pipe(
       catchError(e => {
-        this.router.navigate(['/customers']);
-        console.log(e.error.message);
-        swal.fire('Error edit customer', e.error.error, 'error');
+        if(e.status != 401 && e.error.message){
+          this.router.navigate(['/customers']);
+          console.log(e.error.message);
+        }
         return throwError(e);
       })
     );
   }
 
   update(customer: Customer): Observable<any> {
-    return this.http.put<any>('http://localhost:8080/api/customers/' + customer.id, customer, {headers: this.httpHeader}).pipe(
+    return this.http.put<any>('http://localhost:8080/api/customers/' + customer.id, customer).pipe(
       catchError(e => {
-        console.error(e.error.message);
-        swal.fire('Error update customer', e.error.error, 'error');
+
+        if(e.status == 400){
+          return throwError(e);
+        }
+
+        if(e.error.message){
+          console.error(e.error.message);
+        }
         return throwError(e);
       })
     );
   }
 
   delete(id: number): Observable<Customer> {
-    return this.http.delete<Customer>('http://localhost:8080/api/customers/' + id, {headers: this.httpHeader}).pipe(
+    return this.http.delete<Customer>('http://localhost:8080/api/customers/' + id).pipe(
       catchError(e => {
-        console.error(e.error.message);
-        swal.fire('Error delete customer', e.error.error, 'error');
+
+        if(e.error.message){
+          console.error(e.error.message);
+        }
         return throwError(e);
       })
     );

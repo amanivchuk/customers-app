@@ -21,7 +21,7 @@
               </ul>
 
               <div class="col-sm">
-                <div class="input-group mb-3">
+                <div class="input-group mb-3" *ngIf="authService.hasRole('ROLE_USER')">
                   <div class="custom-file">
                     <input (change)="selectPhoto($event)" type="file" class="custom-file-input" id="inputGroupFile04"
                            aria-describedby="inputGroupFileAddon04">

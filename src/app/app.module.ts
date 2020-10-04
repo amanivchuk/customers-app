@@ -9,7 +9,7 @@ import { DirectiveComponent } from './directive/directive.component';
 import { CustomerComponent } from './customer/customer.component';
 import {CustomerService} from './customer/customer.service';
 import {RouterModule, Routes} from '@angular/router';
-import {HttpClientModule} from '@angular/common/http';
+import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { FormComponent } from './customer/form/form.component';
 import {FormsModule} from '@angular/forms';
 import {registerLocaleData} from '@angular/common';
@@ -19,6 +19,11 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import {MatDatepickerModule} from '@angular/material';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import { DetailComponent } from './customer/detail/detail.component';
+import { LoginComponent } from './users/login/login.component';
+import {AuthGuard} from './users/auth.guard';
+import {RoleGuard} from './users/role.guard';
+import {TokenInterceptor} from './users/interceptors/token.interceptor';
+import {AuthInterceptor} from './users/interceptors/auth.interceptor';
 
 registerLocaleData(localeRU, 'ru')
 
@@ -27,8 +32,9 @@ const routes: Routes = [
   {path: 'directive', component: DirectiveComponent},
   {path: 'customers', component: CustomerComponent},
   {path: 'customers/page/:page', component: CustomerComponent},
-  {path: 'customers/form', component: FormComponent},
-  {path: 'customers/form/:id', component: FormComponent},
+  {path: 'customers/form', component: FormComponent, canActivate: [AuthGuard, RoleGuard],  data: {role: 'ROLE_ADMIN'}},
+  {path: 'customers/form/:id', component: FormComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_ADMIN'}},
+  {path: 'login', component: LoginComponent}
   // {path: 'customers/detail/:id', component: DetailComponent}
 ]
 
@@ -41,7 +47,8 @@ const routes: Routes = [
     CustomerComponent,
     FormComponent,
     PaginatorComponent,
-    DetailComponent
+    DetailComponent,
+    LoginComponent
   ],
   imports: [
     BrowserModule,
@@ -55,7 +62,9 @@ const routes: Routes = [
   ],
   providers: [
     CustomerService,
-    {provide: LOCALE_ID, useValue: 'ru'}
+    {provide: LOCALE_ID, useValue: 'ru'},
+    {provide: HTTP_INTERCEPTORS, useClass: TokenInterceptor, multi: true},
+    {provide: HTTP_INTERCEPTORS, useClass: AuthInterceptor, multi: true}
   ],
   bootstrap: [AppComponent]
 })

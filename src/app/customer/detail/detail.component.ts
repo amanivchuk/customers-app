@@ -4,6 +4,7 @@ import {CustomerService} from '../customer.service';
 import swal from 'sweetalert2';
 import {HttpEventType} from '@angular/common/http';
 import {ModalService} from './modal.service';
+import {AuthService} from '../../users/auth.service';
 
 @Component({
   selector: 'app-detail',
@@ -22,19 +23,11 @@ export class DetailComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private modalService: ModalService
+    private modalService: ModalService,
+    private authService: AuthService
   ) { }
 
-  ngOnInit() {
-    // this.activatedRoute.paramMap.subscribe(params => {
-    //    let id: number = +params.get('id');
-    //    if(id){
-    //      this.customerService.getCustomer(id).subscribe(customer => {
-    //        this.customer = customer;
-    //      })
-    //    }
-    // })
-  }
+  ngOnInit() {}
 
   selectPhoto(event: Event) {
     // @ts-ignore
