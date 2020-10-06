@@ -58,6 +58,7 @@ export class FormComponent implements OnInit {
   }
 
   update(): void {
+    this.customer.bills = null;
     this.customerService.update(this.customer).subscribe(json => {
       this.router.navigate(['/customers']);
       swal.fire('Customer updated', `${json.message}:  ${json.customer.email}`, 'success');

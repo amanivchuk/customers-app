@@ -11,12 +11,12 @@ import {CustomerService} from './customer/customer.service';
 import {RouterModule, Routes} from '@angular/router';
 import {HTTP_INTERCEPTORS, HttpClientModule} from '@angular/common/http';
 import { FormComponent } from './customer/form/form.component';
-import {FormsModule} from '@angular/forms';
+import {FormsModule, ReactiveFormsModule} from '@angular/forms';
 import {registerLocaleData} from '@angular/common';
 import localeRU from '@angular/common/locales/ru';
 import { PaginatorComponent } from './paginator/paginator.component';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import {MatDatepickerModule} from '@angular/material';
+import {MatAutocompleteModule, MatDatepickerModule, MatFormFieldModule, MatInputModule} from '@angular/material';
 import {MatMomentDateModule} from '@angular/material-moment-adapter';
 import { DetailComponent } from './customer/detail/detail.component';
 import { LoginComponent } from './users/login/login.component';
@@ -24,6 +24,8 @@ import {AuthGuard} from './users/auth.guard';
 import {RoleGuard} from './users/role.guard';
 import {TokenInterceptor} from './users/interceptors/token.interceptor';
 import {AuthInterceptor} from './users/interceptors/auth.interceptor';
+import { DetailBillComponent } from './bill/detail-bill/detail-bill.component';
+import { BillComponent } from './bill/bill/bill.component';
 
 registerLocaleData(localeRU, 'ru')
 
@@ -34,7 +36,9 @@ const routes: Routes = [
   {path: 'customers/page/:page', component: CustomerComponent},
   {path: 'customers/form', component: FormComponent, canActivate: [AuthGuard, RoleGuard],  data: {role: 'ROLE_ADMIN'}},
   {path: 'customers/form/:id', component: FormComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_ADMIN'}},
-  {path: 'login', component: LoginComponent}
+  {path: 'login', component: LoginComponent},
+  {path: 'bill/:id', component: DetailBillComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_USER'}},
+  {path: 'bill/form/:customerId', component: BillComponent, canActivate: [AuthGuard, RoleGuard], data: {role: 'ROLE_ADMIN'}}
   // {path: 'customers/detail/:id', component: DetailComponent}
 ]
 
@@ -48,7 +52,9 @@ const routes: Routes = [
     FormComponent,
     PaginatorComponent,
     DetailComponent,
-    LoginComponent
+    LoginComponent,
+    DetailBillComponent,
+    BillComponent
   ],
   imports: [
     BrowserModule,
@@ -58,7 +64,11 @@ const routes: Routes = [
     FormsModule,
     BrowserAnimationsModule,
     MatDatepickerModule,
-    MatMomentDateModule
+    MatMomentDateModule,
+    MatFormFieldModule,
+    MatInputModule,
+    ReactiveFormsModule,
+    MatAutocompleteModule
   ],
   providers: [
     CustomerService,

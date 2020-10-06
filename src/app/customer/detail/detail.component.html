@@ -47,8 +47,43 @@
                      alt="{{customer.photo}}" class="img-thumbnail rounded">
               </div>
             </div>
-          </div>
 
+            <div class="row">
+              <td><button class="btn btn-success btn-sm" type="button" [routerLink]="['/bill/form', customer.id]">Create Bill</button></td>
+            </div>
+
+            <div class="row">
+
+              <div class="alert alert-info my-4" *ngIf="customer.bills.length == 0">
+                Customer {{customer.firstName}} {{customer.lastName}} dosn't has bill
+              </div>
+
+              <table class="table table-bordered table-striped my-4"  *ngIf="customer.bills.length > 0">
+                <thead>
+                  <tr>
+                    <th>Invoice</th>
+                    <th>Description</th>
+                    <th>Date</th>
+                    <th>Total</th>
+                    <th>Detail</th>
+                    <th>Delete</th>
+                  </tr>
+                </thead>
+                <tbody>
+                <tr *ngFor="let bill of customer.bills">
+                  <td>{{bill.id}}</td>
+                  <td>{{bill.description}}</td>
+                  <td>{{bill.createdAt}}</td>
+                  <td>{{bill.total}}</td>
+                  <td><button class="btn btn-primary btn-sm" type="button"
+                    [routerLink]="['/bill', bill.id]"
+                  >Open</button></td>
+                  <button class="btn btn-danger btn-sm" type="button" (click)="delete(bill)">Delete</button>
+                </tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
         <div class="modal-footer">
           <button (click)="closeModal()" type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>

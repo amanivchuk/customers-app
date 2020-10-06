@@ -5,6 +5,9 @@ import swal from 'sweetalert2';
 import {HttpEventType} from '@angular/common/http';
 import {ModalService} from './modal.service';
 import {AuthService} from '../../users/auth.service';
+import {BillService} from '../../bill/bill.service';
+import {Bill} from '../../bill/model/Bill'
+import Swal from "sweetalert2";
 
 @Component({
   selector: 'app-detail',
@@ -24,7 +27,8 @@ export class DetailComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private modalService: ModalService,
-    private authService: AuthService
+    private authService: AuthService,
+    private billService: BillService
   ) { }
 
   ngOnInit() {}
@@ -67,5 +71,48 @@ export class DetailComponent implements OnInit {
 
   closeModal() {
     this.modalService.closeModal();
+  }
+
+  delete(bill: Bill): void {
+
+    const swalWithBootstrapButtons = Swal.mixin({
+      customClass: {
+        confirmButton: 'btn btn-success',
+        cancelButton: 'btn btn-danger'
+      },
+      buttonsStyling: false
+    });
+
+    swalWithBootstrapButtons.fire({
+      title: 'Are you sure?',
+      text: `Bill ${bill.description} will be delete`,
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Yes, delete it!',
+      cancelButtonText: 'No, cancel!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+
+        this.billService.delete(bill.id).subscribe(result => {
+          this.customer.bills = this.customer.bills.filter(b => b !== bill);
+          swalWithBootstrapButtons.fire(
+            'Deleted!',
+            'Bill deleted successfully!',
+            'success'
+          );
+        });
+      } else if (
+        /* Read more about handling dismissals below */
+        result.dismiss === Swal.DismissReason.cancel
+      ) {
+        swalWithBootstrapButtons.fire(
+          'Cancelled',
+          'Your imaginary file is safe :)',
+          'error'
+        );
+      }
+    });
+
   }
 }

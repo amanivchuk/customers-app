@@ -22,6 +22,7 @@
         <th>Email</th>
         <th>CreatedAt</th>
         <th>Region</th>
+        <th *ngIf="authService.hasRole('ROLE_ADMIN')">Create Bill</th>
         <th *ngIf="authService.hasRole('ROLE_ADMIN')">Edit</th>
         <th *ngIf="authService.hasRole('ROLE_ADMIN')">Delete</th>
       </tr>
@@ -30,7 +31,8 @@
       <tr *ngFor="let cust of customers">
         <!--        <td><button [routerLink]="['/customers/detail', cust.id]" class="btn btn-success btn-sm">{{cust.id}}</button></td>-->
         <!--        <td><button (click)="openModal(cust)" class="btn btn-success btn-sm">{{cust.id}}</button></td>-->
-        <td *ngIf="authService.hasRole('ROLE_USER')"><img (click)="openModal(cust)" *ngIf="cust?.photo" src="http://localhost:8080/api/customers/upload/img/{{cust.photo}}"
+        <td *ngIf="authService.hasRole('ROLE_USER')">
+          <img (click)="openModal(cust)" *ngIf="cust?.photo" src="http://localhost:8080/api/customers/upload/img/{{cust.photo}}"
                  alt="{{cust.photo}}" class="img-thumbnail rounded"
                  style="width: 64px; cursor: pointer"
         >
@@ -45,6 +47,9 @@
         <td>{{cust.email}}</td>
         <td>{{cust.createdAt | date:'fullDate'}}</td>
         <td>{{cust.region.name}}</td>
+        <td *ngIf="authService.hasRole('ROLE_ADMIN')">
+          <button class="btn btn-success btn-sm" type="button" [routerLink]="['/bill/form', cust.id]">Create Bill</button>
+        </td>
         <td *ngIf="authService.hasRole('ROLE_ADMIN')">
           <button type="button" name="edit" [routerLink]="['/customers/form', cust.id]" class="btn btn-primary">edit
           </button>
