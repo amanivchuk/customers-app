@@ -26,8 +26,8 @@ export class DetailComponent implements OnInit {
 
   constructor(
     private customerService: CustomerService,
-    private modalService: ModalService,
-    private authService: AuthService,
+    public modalService: ModalService,
+    public authService: AuthService,
     private billService: BillService
   ) { }
 

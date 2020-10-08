@@ -31,7 +31,7 @@ export class BillComponent implements OnInit {
     private activatedRoute: ActivatedRoute,
     private billService: BillService,
     private router: Router,
-    private authService: AuthService
+    public authService: AuthService
   ) { }
 
   ngOnInit() {
@@ -122,7 +122,7 @@ export class BillComponent implements OnInit {
     if(billForm.form.valid && this.bill.items.length > 0){
       this.billService.create(this.bill).subscribe(bill => {
         swal.fire(this.title, `Bill ${bill.description} create successfully!`, 'success');
-        this.router.navigate(['/customers']);
+        this.router.navigate(['/bill', bill.id]);
       })
     }
 

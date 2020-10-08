@@ -12,7 +12,7 @@ import {Region} from '../Region';
 })
 export class FormComponent implements OnInit {
 
-  customer: Customer = new Customer();
+  public customer: Customer = new Customer();
   title: string = 'Create new customer';
 
   regions: Region[];

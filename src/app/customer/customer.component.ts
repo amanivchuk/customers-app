@@ -21,8 +21,8 @@ export class CustomerComponent implements OnInit {
   constructor(
     private customerService: CustomerService,
     private activatedRoute: ActivatedRoute,
-    private modalService: ModalService,
-    private authService: AuthService
+    public modalService: ModalService,
+    public authService: AuthService
   ) {
   }
 
